@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="GpsPoiApp.Tests/GpsPoiApp.Tests.csproj" />
+  <Project Path="GpsPoiApp/GpsPoiApp.csproj" />
+</Solution>
