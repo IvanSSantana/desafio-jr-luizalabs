@@ -25,7 +25,7 @@ public class Point
         return calculatedDistance;
     }
 
-    public bool isInRange(Point referencePoint, int maxDistance)
+    public bool IsInRange(Point referencePoint, int maxDistance)
     {
         int calculatedDistance = DistanceMeter(referencePoint);
         return calculatedDistance <= maxDistance;
