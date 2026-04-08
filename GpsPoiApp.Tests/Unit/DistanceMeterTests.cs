@@ -15,6 +15,6 @@ public class DistanceMeterTests
         double distance = pointA.DistanceMeter(pointB);
 
         // Assert (verification of the result)
-        Assert.Equal(7, distance);
+        Assert.Equal(7.28, distance);
     }
 }

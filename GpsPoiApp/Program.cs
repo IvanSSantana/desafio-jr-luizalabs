@@ -1,5 +1,6 @@
 using GpsPoiApp.Infrastructure;
 using GpsPoiApp.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,5 +26,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>(); // Get the AppDbContext instance from the service provider
+    
+    dbContext.Database.Migrate();
+    DbSeeding.Seed(dbContext);
+}
 
 app.Run();

@@ -22,12 +22,11 @@ public class PointServices : IPointService
         return _dbContext.Points.ToList(); // Returns the entire list as a List<Point>
     }
 
-    public List<Point> GetPointsByProximity(int x, int y, int maxDistance)
+    public List<Point> GetPointsByProximity(int x, int y, double maxDistance)
     {
-        List<Point> nearbyPoints = _dbContext.Points.Where(
-            p => p.IsInRange(new Point(x, y), maxDistance)
-            ).ToList(); // Linq query to filter points based on proximity
-            // Above i convert the result to List type because Linq only works with IEnumerable
+        List<Point> dbToList = _dbContext.Points.ToList(); // Linq query to filter points based on proximity
+
+        List<Point> nearbyPoints = dbToList.Where(point => point.IsInRange(new Point(x, y), maxDistance)).ToList();
 
         return nearbyPoints;
     }

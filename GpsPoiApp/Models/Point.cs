@@ -2,6 +2,7 @@ namespace GpsPoiApp.Models;
 
 public class Point
 {  
+    public Guid Id { get; set; }
     public string? Name { get; set; }
     public int X { get; private set; }
     public int Y { get; private set; }
@@ -16,16 +17,17 @@ public class Point
         X = x;
         Y = y;
         Name = name;
+        Id = Guid.NewGuid();
     }
 
     public double DistanceMeter(Point otherPoint)
     {
         // Mathematical formula to calculate the distance between two points in a cartesian plane
-        double calculatedDistance = Math.Sqrt(Math.Pow(otherPoint.X - X, 2) + Math.Pow(otherPoint.Y - Y, 2));
+        double calculatedDistance = Math.Round(Math.Sqrt(Math.Pow(otherPoint.X - X, 2) + Math.Pow(otherPoint.Y - Y, 2)), 2);
         return calculatedDistance;
     }
 
-    public bool IsInRange(Point referencePoint, int maxDistance)
+    public bool IsInRange(Point referencePoint, double maxDistance)
     {
         double calculatedDistance = DistanceMeter(referencePoint);
         return calculatedDistance <= maxDistance;
