@@ -4,7 +4,7 @@ namespace GpsPoiApp.Services;
 
 public interface IPointService
 {
-    Task<Point> AddPoint(Point point);
-    Task<List<Point>> GetAllPoints();
-    Task<List<Point>> GetPointsByProximity(int x, int y, int maxDistance);
+    Point AddPoint(Point point);
+    List<Point> GetAllPoints();
+    List<Point> GetPointsByProximity(int x, int y, int maxDistance);
 }

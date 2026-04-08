@@ -18,16 +18,16 @@ public class Point
         Name = name;
     }
 
-    public int DistanceMeter(Point otherPoint)
+    public double DistanceMeter(Point otherPoint)
     {
         // Mathematical formula to calculate the distance between two points in a cartesian plane
-        int calculatedDistance = (int)Math.Round(Math.Sqrt(Math.Pow(otherPoint.X - X, 2) + Math.Pow(otherPoint.Y - Y, 2)), 0);
+        double calculatedDistance = Math.Sqrt(Math.Pow(otherPoint.X - X, 2) + Math.Pow(otherPoint.Y - Y, 2));
         return calculatedDistance;
     }
 
     public bool IsInRange(Point referencePoint, int maxDistance)
     {
-        int calculatedDistance = DistanceMeter(referencePoint);
+        double calculatedDistance = DistanceMeter(referencePoint);
         return calculatedDistance <= maxDistance;
     }
 }

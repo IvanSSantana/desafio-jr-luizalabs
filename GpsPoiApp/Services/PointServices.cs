@@ -1,43 +1,34 @@
+using GpsPoiApp.Infrastructure;
 using GpsPoiApp.Models;
 
 namespace GpsPoiApp.Services;
 
 public class PointServices : IPointService
 {
-    private readonly List<Point> _dbContextMock;
-    
-    public PointServices()
-    { // Mocking database according tasks' documentation example
-        _dbContextMock = new List<Point>()
-        {
-            new Point(27, 12, "Cafe"),
-            new Point(31, 18, "Gas Station"),
-            new Point(15, 12, "Jewelry"),
-            new Point(19, 21, "Floriculture"),
-            new Point(12, 8, "Pub"),
-            new Point(23, 6, "Supermarket"),
-            new Point(28, 2, "Steakhouse"),
-        };
-    }   
+    private readonly AppDbContext _dbContext;
 
-    public Task<Point> AddPoint(Point point)
+    public PointServices(AppDbContext dbContext)
     {
-        _dbContextMock.Add(point);
-        return Task.FromResult(point);
+        _dbContext = dbContext;
     }
 
-    public Task<List<Point>> GetAllPoints()
+    public Point AddPoint(Point point)
     {
-        return Task.FromResult(_dbContextMock); // Returns the entire list as a List<Point>
+        return _dbContext.Points.Add(point).Entity; // Adds the point to the database and returns the result as Entity
     }
 
-    public Task<List<Point>> GetPointsByProximity(int x, int y, int maxDistance)
+    public List<Point> GetAllPoints()
     {
-        List<Point> nearbyPoints = _dbContextMock.Where(
+        return _dbContext.Points.ToList(); // Returns the entire list as a List<Point>
+    }
+
+    public List<Point> GetPointsByProximity(int x, int y, int maxDistance)
+    {
+        List<Point> nearbyPoints = _dbContext.Points.Where(
             p => p.IsInRange(new Point(x, y), maxDistance)
             ).ToList(); // Linq query to filter points based on proximity
             // Above i convert the result to List type because Linq only works with IEnumerable
 
-        return Task.FromResult(nearbyPoints);
+        return nearbyPoints;
     }
 }

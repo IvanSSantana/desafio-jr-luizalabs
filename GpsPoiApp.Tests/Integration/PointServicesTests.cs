@@ -1,3 +1,4 @@
+using GpsPoiApp.Infrastructure;
 using GpsPoiApp.Models;
 using GpsPoiApp.Services;
 
@@ -6,21 +7,22 @@ namespace GpsPoiApp.Tests;
 public class PointServicesTests
 {
     [Fact]
-    public async Task AddPoint_IsWorkingCorrectly()
+    public void AddPoint_IsWorkingCorrectly()
     {
         // Arrange
         Point pointA = new Point(27, 12);
-        PointServices pointServices = new();
+        AppDbContext dbContext = new();
+        PointServices pointServices = new(dbContext);
 
         // Act
-        Point result = await pointServices.AddPoint(pointA);
+        Point result = pointServices.AddPoint(pointA);
 
         // Assert
         Assert.Equal(pointA, result);
     }
 
     [Fact]
-    public async Task GetAllPoints_ReturnsAllPoints()
+    public void GetAllPoints_ReturnsAllPoints()
     {
         // Arrange
         List<Point> dbMock = new()
@@ -33,10 +35,11 @@ public class PointServicesTests
             new Point(23, 6, "Supermarket"),
             new Point(28, 2, "Steakhouse"),
         };
-        PointServices pointServices = new();
+        AppDbContext dbContext = new();
+        PointServices pointServices = new(dbContext);
 
         // Act
-        List<Point> result = await pointServices.GetAllPoints();
+        List<Point> result = pointServices.GetAllPoints();
 
         // Assert
         Assert.NotEmpty(result);
@@ -46,10 +49,11 @@ public class PointServicesTests
     }
 
     [Fact]
-    public async Task GetPointsByProximity_ReturnsCorrectPoints()
+    public void GetPointsByProximity_ReturnsCorrectPoints()
     {
         // Arrange
-        PointServices pointServices = new();
+        AppDbContext dbContext = new();
+        PointServices pointServices = new(dbContext);
         int x = 20, y = 10, maxDistance = 10;
         List<Point> awaitedResponse = new() // According the documentation example
         {
@@ -60,7 +64,7 @@ public class PointServicesTests
         };
 
         // Act
-        List<Point> result = await pointServices.GetPointsByProximity(x, y, maxDistance);
+        List<Point> result = pointServices.GetPointsByProximity(x, y, maxDistance);
 
         // Assert
         Assert.NotEmpty(result);
