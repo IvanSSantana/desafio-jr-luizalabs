@@ -6,7 +6,7 @@ public static class DbSeeding
 {
     public static void Seed(AppDbContext context)
     {
-        if (context.Points.Any()) return; // if data already exists don't seed
+        if (context.Points.Any()) return; // If data already exists don't seed
         
         List<Point> seed = new()
         {
@@ -21,6 +21,5 @@ public static class DbSeeding
 
         context.Points.AddRange(seed);
         context.SaveChanges();
-        
     }
 }

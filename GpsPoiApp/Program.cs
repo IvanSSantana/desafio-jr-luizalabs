@@ -1,4 +1,5 @@
 using GpsPoiApp.Infrastructure;
+using GpsPoiApp.Repository;
 using GpsPoiApp.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>();
-builder.Services.AddScoped<IPointService, PointServices>();
+builder.Services.AddScoped<IPointService, PointService>();
+builder.Services.AddScoped<IPointRepository, PointRepository>();
 
 var app = builder.Build();
 

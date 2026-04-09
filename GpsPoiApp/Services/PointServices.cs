@@ -1,33 +1,41 @@
-using GpsPoiApp.Infrastructure;
+using GpsPoiApp.Communication.Conversor;
+using GpsPoiApp.Communication.Requests;
+using GpsPoiApp.Communication.Responses;
 using GpsPoiApp.Models;
+using GpsPoiApp.Repository;
 
 namespace GpsPoiApp.Services;
 
-public class PointServices : IPointService
+public class PointService : IPointService
 {
-    private readonly AppDbContext _dbContext;
+    private readonly IPointRepository _pointRepository;
 
-    public PointServices(AppDbContext dbContext)
+    public PointService(IPointRepository pointRepository)
     {
-        _dbContext = dbContext;
+        _pointRepository = pointRepository;
     }
 
-    public Point AddPoint(Point point)
+    public CreatedPointResponse AddPoint(CreatePointRequest point)
     {
-        return _dbContext.Points.Add(point).Entity; // Adds the point to the database and returns the result as Entity
+        Point pointRequestToDbModel = ResponseConversorToDbModel.ConvertToDbModel(point);
+        Point pointFromDb = _pointRepository.AddPoint(pointRequestToDbModel);
+
+        return DbModelConversorToResponse.ConvertToResponse(pointFromDb);
     }
 
-    public List<Point> GetAllPoints()
+    public GetPointsResponse GetAllPoints()
     {
-        return _dbContext.Points.ToList(); // Returns the entire list as a List<Point>
+        List<Point> points = _pointRepository.GetAllPoints();
+        GetPointsResponse response = DbModelConversorToResponse.ConvertToResponse(points);
+
+        return response;
     }
 
-    public List<Point> GetPointsByProximity(int x, int y, double maxDistance)
+    public GetPointsResponse GetPointsByProximity(int x, int y, double maxDistance)
     {
-        List<Point> dbToList = _dbContext.Points.ToList(); // Linq query to filter points based on proximity
-
-        List<Point> nearbyPoints = dbToList.Where(point => point.IsInRange(new Point(x, y), maxDistance)).ToList();
-
-        return nearbyPoints;
+        List<Point> nearbyPoints = _pointRepository.GetPointsByProximity(x, y, maxDistance);
+        GetPointsResponse response = DbModelConversorToResponse.ConvertToResponse(nearbyPoints);
+        
+        return response;
     }
 }

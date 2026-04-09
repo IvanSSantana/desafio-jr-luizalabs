@@ -3,18 +3,19 @@ using GpsPoiApp.Helper;
 using GpsPoiApp.Infrastructure;
 using GpsPoiApp.Models;
 using GpsPoiApp.Services;
+using GpsPoiApp.Repository;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace GpsPoiApp.Tests;
 
-public class PointServicesTests : IDisposable
+public class PointRepositoryTests : IDisposable
 {
     private readonly AppDbContext _dbContext;
     private readonly SqliteConnection _dbConnection;
 
     // Setup method to create an in-memory database context for every testing
-    public PointServicesTests()
+    public PointRepositoryTests()
     {
         var (dbContext, connection) = TestDbFactory.CreateInMemoryDbContext();
         _dbContext = dbContext;
@@ -33,13 +34,20 @@ public class PointServicesTests : IDisposable
     {
         // Arrange
         Point pointA = new Point(27, 12);
-        PointServices pointServices = new(_dbContext);
+        PointRepository PointRepository = new(_dbContext);
 
         // Act
-        Point result = pointServices.AddPoint(pointA);
+        Point result = PointRepository.AddPoint(pointA);
+        List<Point> allPoints = PointRepository.GetAllPoints();
 
         // Assert
-        Assert.Equal(pointA, result);
+        result.Should().NotBeNull();
+
+        result.Should().BeEquivalentTo(pointA, opt => 
+            opt.Excluding(p => p.Id) 
+        );
+        
+        allPoints.Should().ContainSingle(p => p.X == pointA.X && p.Y == pointA.Y);
     }
 
     [Fact]
@@ -56,10 +64,10 @@ public class PointServicesTests : IDisposable
             new Point(23, 6, "Supermarket"),
             new Point(28, 2, "Steakhouse"),
         };
-        PointServices pointServices = new(_dbContext);
+        PointRepository PointRepository = new(_dbContext);
 
         // Act
-        List<Point> result = pointServices.GetAllPoints();
+        List<Point> result = PointRepository.GetAllPoints();
 
         // Assert
         result.Should().NotBeEmpty();
@@ -74,7 +82,7 @@ public class PointServicesTests : IDisposable
     public void GetPointsByProximity_ReturnsCorrectPoints()
     {
         // Arrange
-        PointServices pointServices = new(_dbContext);
+        PointRepository PointRepository = new(_dbContext);
         int x = 20, y = 10, maxDistance = 10;
         List<Point> awaitedResponse = new() // According the documentation example
         {
@@ -85,7 +93,7 @@ public class PointServicesTests : IDisposable
         };
 
         // Act
-        List<Point> result = pointServices.GetPointsByProximity(x, y, maxDistance);
+        List<Point> result = PointRepository.GetPointsByProximity(x, y, maxDistance);
 
         // Assert
         result.Should().NotBeEmpty();

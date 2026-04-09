@@ -1,41 +1,55 @@
+using GpsPoiApp.Communication.Requests;
+using GpsPoiApp.Communication.Responses;
 using GpsPoiApp.Models;
 using GpsPoiApp.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace GpsPoiApp.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]/v1")]
 public class PointController : ControllerBase
 {
-    private readonly PointServices _pointServices;
+    private readonly IPointService _pointServices;
 
-    public PointController(PointServices pointServices)
+    public PointController(IPointService pointServices)
     {
         _pointServices = pointServices;
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Point>))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ModelStateDictionary))]
     public IActionResult GetAllPoints()
     {   
-        List<Point> response = _pointServices.GetAllPoints();
+        GetPointsResponse response = _pointServices.GetAllPoints();
+
+        if (response == null || response.Points.Count == 0) return NoContent();
+
         return Ok(response);
     }
 
     [HttpGet("proximity")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Point>))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ModelStateDictionary))]
     public IActionResult GetPointsByProximity([FromQuery] int x, [FromQuery] int y, [FromQuery] double maxDistance)
     {
-        List<Point> response = _pointServices.GetPointsByProximity(x, y, maxDistance);
+        GetPointsResponse response = _pointServices.GetPointsByProximity(x, y, maxDistance);
+
+        if (response == null || response.Points.Count == 0) return NoContent();
+
         return Ok(response);
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Point))]
-    public IActionResult AddPoint([FromBody] Point point)
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ModelStateDictionary))]
+    public IActionResult AddPoint([FromBody] CreatePointRequest point)
     {
-        Point response = _pointServices.AddPoint(point);
+        CreatedPointResponse response = _pointServices.AddPoint(point);
         return Created("", response);
     }
 }
