@@ -14,7 +14,10 @@ public class PointRepository : IPointRepository
 
     public Point AddPoint(Point point)
     {
-        return _dbContext.Points.Add(point).Entity; // Adds the point to the database and returns the result as Entity
+        var addedPoint = _dbContext.Points.Add(point);
+        _dbContext.SaveChanges();
+
+        return addedPoint.Entity; 
     }
 
     public List<Point> GetAllPoints()

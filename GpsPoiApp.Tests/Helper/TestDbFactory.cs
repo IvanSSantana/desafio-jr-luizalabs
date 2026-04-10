@@ -17,6 +17,7 @@ public static class TestDbFactory
 
         var context = new AppDbContext(options);
 
+        context.Database.EnsureDeleted(); // Ensures that it doesn't exist an pre-existing database
         context.Database.EnsureCreated(); // Grants the creation of the database schema according to DbContext of real database 
         DbSeeding.Seed(context); 
 

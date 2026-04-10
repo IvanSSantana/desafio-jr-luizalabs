@@ -52,4 +52,10 @@ public class PointController : ControllerBase
         CreatedPointResponse response = _pointServices.AddPoint(point);
         return Created("", response);
     }
+
+    [HttpGet("error")]
+    public IActionResult ThrowError()
+    {
+        throw new Exception("This is a test exception for the global exception handler middleware.");
+    }
 }

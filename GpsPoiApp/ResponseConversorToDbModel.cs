@@ -22,11 +22,7 @@ public static class DbModelConversorToResponse
     public static GetPointsResponse ConvertToResponse(List<Point> points)
     {
         return new GetPointsResponse { 
-            Points = points.Select(p => 
-            new SimplifiedPointResponse { 
-                Name = p.Name!, 
-                X = p.X, 
-                Y = p.Y 
-            }).ToList() };
+            Points = points.Select(p => new Point(p.X, p.Y, p.Name) { Id = p.Id }).ToList() 
+        };
     }
 }

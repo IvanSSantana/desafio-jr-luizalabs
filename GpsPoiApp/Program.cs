@@ -1,4 +1,5 @@
 using GpsPoiApp.Infrastructure;
+using GpsPoiApp.Infrastructure.Middlewares;
 using GpsPoiApp.Repository;
 using GpsPoiApp.Services;
 using Microsoft.EntityFrameworkCore;
@@ -11,9 +12,11 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+#region Dependency Injection
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<IPointService, PointService>();
 builder.Services.AddScoped<IPointRepository, PointRepository>();
+#endregion
 
 var app = builder.Build();
 
@@ -23,18 +26,22 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
 
+#region Database Migration and Seeding
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>(); // Get the AppDbContext instance from the service provider
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>(); 
     
     dbContext.Database.Migrate();
     DbSeeding.Seed(dbContext);
 }
+#endregion
 
 app.Run();

@@ -2,10 +2,8 @@ using FluentAssertions;
 using GpsPoiApp.Helper;
 using GpsPoiApp.Infrastructure;
 using GpsPoiApp.Models;
-using GpsPoiApp.Services;
 using GpsPoiApp.Repository;
 using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 
 namespace GpsPoiApp.Tests;
 
@@ -33,7 +31,7 @@ public class PointRepositoryTests : IDisposable
     public void AddPoint_IsWorkingCorrectly()
     {
         // Arrange
-        Point pointA = new Point(27, 12);
+        Point pointA = new Point(40, 39, "Store");
         PointRepository PointRepository = new(_dbContext);
 
         // Act
@@ -43,11 +41,9 @@ public class PointRepositoryTests : IDisposable
         // Assert
         result.Should().NotBeNull();
 
-        result.Should().BeEquivalentTo(pointA, opt => 
-            opt.Excluding(p => p.Id) 
-        );
+        result.Should().BeEquivalentTo(pointA);
         
-        allPoints.Should().ContainSingle(p => p.X == pointA.X && p.Y == pointA.Y);
+        allPoints.Should().ContainSingle(p => p.X == pointA.X && p.Y == pointA.Y && p.Id == result.Id && p.Name == pointA.Name);
     }
 
     [Fact]
@@ -89,7 +85,7 @@ public class PointRepositoryTests : IDisposable
             new Point(27, 12, "Cafe"),
             new Point(15, 12, "Jewelry"),
             new Point(12, 8, "Pub"),
-            new Point(23, 6, "Supermarket"),
+            new Point(23, 6, "Supermarket")
         };
 
         // Act
