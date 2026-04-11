@@ -1,6 +1,5 @@
 using GpsPoiApp.Communication.Requests;
 using GpsPoiApp.Communication.Responses;
-using GpsPoiApp.Models;
 
 namespace GpsPoiApp.Services;
 

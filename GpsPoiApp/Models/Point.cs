@@ -9,6 +9,9 @@ public class Point
 
     public Point(int x, int y, string? name = null)
     {
+        // Despite the fact that the CreatePointRequest class has validation attributes
+        // I think it's a good idea to also validate the input in the Point class constructor
+        // To ensure that the Point class can be used with total security.
         if (x < 0 || y < 0)
         {
             throw new ArgumentException("Coordinates must be positive.");

@@ -26,7 +26,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseMiddleware<NotFoundMiddleware>();
+app.UseMiddleware<InternalErrorMiddleware>();
 
 app.UseHttpsRedirection();
 
