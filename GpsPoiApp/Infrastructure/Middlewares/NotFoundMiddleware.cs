@@ -1,3 +1,5 @@
+using GpsPoiApp.Communication.Responses;
+
 namespace GpsPoiApp.Infrastructure.Middlewares;
 
 public class NotFoundMiddleware
@@ -17,11 +19,11 @@ public class NotFoundMiddleware
         {
             httpContext.Response.ContentType = "application/json";
             
-            var response = new // According to RFC 7807 - Problem Details for HTTP APIs
+            MessageErrorResponse response = new() // According to RFC 7807 - Problem Details for HTTP APIs
             {
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
-                Title = "Not Found",
-                StatusCode = httpContext.Response.StatusCode,
+                Title = "Not found.",
+                Status = httpContext.Response.StatusCode,
                 Message = "The requested resource was not found.",
                 TraceId = httpContext.TraceIdentifier
             };

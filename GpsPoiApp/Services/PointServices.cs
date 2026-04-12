@@ -17,7 +17,7 @@ public class PointService : IPointService
 
     public CreatedPointResponse AddPoint(CreatePointRequest point)
     {
-        Point pointRequestToDbModel = ResponseConversorToDbModel.ConvertToDbModel(point);
+        Point pointRequestToDbModel = RequestConversorToDbModel.ConvertToDbModel(point);
         Point pointFromDb = _pointRepository.AddPoint(pointRequestToDbModel);
 
         return DbModelConversorToResponse.ConvertToResponse(pointFromDb);

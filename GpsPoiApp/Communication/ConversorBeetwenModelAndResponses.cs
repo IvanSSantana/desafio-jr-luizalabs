@@ -4,7 +4,7 @@ using GpsPoiApp.Models;
 
 namespace GpsPoiApp.Communication.Conversor;
 
-public static class ResponseConversorToDbModel
+public static class RequestConversorToDbModel
 {
     public static Point ConvertToDbModel(CreatePointRequest request)
     {
@@ -16,13 +16,13 @@ public static class DbModelConversorToResponse
 {
     public static CreatedPointResponse ConvertToResponse(Point point)
     {
-        return new CreatedPointResponse { X = point.X, Y = point.Y, Name = point.Name! };
+        return new CreatedPointResponse { X = point.X, Y = point.Y, Name = point.Name!, Id = point.Id };
     }
 
     public static GetPointsResponse ConvertToResponse(List<Point> points)
     {
         return new GetPointsResponse { 
-            Points = points.Select(p => new Point(p.X, p.Y, p.Name) { Id = p.Id }).ToList() 
+            Points = points.Select(p => new CreatedPointResponse { X = p.X, Y = p.Y, Name = p.Name!, Id = p.Id }).ToList() 
         };
     }
 }

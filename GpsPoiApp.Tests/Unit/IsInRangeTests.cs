@@ -5,7 +5,7 @@ namespace GpsPoiApp.Tests;
 public class ProximityCalculatorTests
 {
     [Fact]
-    public void IsInRange_ReturnsTrue()
+    public void IsInRange_ShouldReturnTrue()
     {
         // Arrange
         Point pointA = new Point(27, 12);
@@ -19,7 +19,7 @@ public class ProximityCalculatorTests
         Assert.True(isInRange);
     }
     [Fact]
-    public void IsInRange_ReturnsFalse()
+    public void IsInRange_ShouldReturnFalse()
     {
         // Arrange
         Point pointA = new Point(27, 12);

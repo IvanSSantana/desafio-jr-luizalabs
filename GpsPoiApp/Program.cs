@@ -36,13 +36,18 @@ app.UseAuthorization();
 app.MapControllers();
 
 #region Database Migration and Seeding
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>(); 
-    
-    dbContext.Database.Migrate();
-    DbSeeding.Seed(dbContext);
-}
-#endregion
 
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>(); 
+
+        dbContext.Database.Migrate();
+        DbSeeding.Seed(dbContext);
+    }
+}
+
+#endregion
+ 
 app.Run();

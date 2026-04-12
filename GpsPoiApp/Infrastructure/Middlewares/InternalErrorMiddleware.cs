@@ -1,3 +1,5 @@
+using GpsPoiApp.Communication.Responses;
+
 namespace GpsPoiApp.Infrastructure.Middlewares;
 
 public class InternalErrorMiddleware
@@ -28,11 +30,11 @@ public class InternalErrorMiddleware
         httpContext.Response.ContentType = "application/json";
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-        var response = new // According to RFC 7807 - Problem Details for HTTP APIs
+        MessageErrorResponse response = new() // According to RFC 7807 - Problem Details for HTTP APIs
         {
             Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
             Title = "Internal Server Error",
-            StatusCode = httpContext.Response.StatusCode,
+            Status = httpContext.Response.StatusCode,
             Message = "An unexpected error occurred. Please try again later.",
             TraceId = httpContext.TraceIdentifier
         };

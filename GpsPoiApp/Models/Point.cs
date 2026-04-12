@@ -14,7 +14,7 @@ public class Point
         // To ensure that the Point class can be used with total security.
         if (x < 0 || y < 0)
         {
-            throw new ArgumentException("Coordinates must be positive.");
+            throw new ArgumentOutOfRangeException("Coordinates must be positive.");
         }
 
         X = x;
