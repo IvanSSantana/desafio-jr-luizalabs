@@ -13,6 +13,7 @@ Um desafio técnico da empresa LuizaLabs que consiste numa API para um serviço 
 * xUnit
 * FluentAssertions
 * Moq (testes unitários)
+* Scalar UI
 
 ---
 
@@ -40,6 +41,13 @@ dotnet run
 cd GpsPoiApp.Tests
 dotnet test
 ```
+
+---
+
+## Documentação
+
+* Documentação automática com OpenAI e Scalar UI
+* O link para a documentação aparece no terminal logo após o ```dotnet run```
 
 ---
 
@@ -256,3 +264,5 @@ Isso garante:
 * Layered Architecture
 
 ---
+
+

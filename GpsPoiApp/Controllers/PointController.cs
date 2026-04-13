@@ -21,7 +21,7 @@ public class PointController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Point>))]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(MessageErrorResponse))]
     public IActionResult GetAllPoints()
     {   
         GetPointsResponse response = _pointServices.GetAllPoints();
@@ -35,7 +35,7 @@ public class PointController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Point>))]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(MultipleErrorsResponse))]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(MultipleErrorsResponse))]
     public IActionResult GetPointsByProximity([FromQuery] int x, [FromQuery] int y, [FromQuery] double maxDistance)
     {
         if (x < 0 || y < 0)
@@ -68,7 +68,7 @@ public class PointController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Point))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ModelStateDictionary))]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(MessageErrorResponse))]
     public IActionResult AddPoint([FromBody] CreatePointRequest point)
     {
         CreatedPointResponse response = _pointServices.AddPoint(point);
@@ -76,6 +76,7 @@ public class PointController : ControllerBase
     }
 
     [HttpGet("error")]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(MessageErrorResponse))]
     public IActionResult ThrowError()
     {
         throw new Exception("This is a test exception for the global exception handler middleware.");

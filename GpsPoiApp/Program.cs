@@ -3,6 +3,7 @@ using GpsPoiApp.Infrastructure.Middlewares;
 using GpsPoiApp.Repository;
 using GpsPoiApp.Services;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +21,18 @@ builder.Services.AddScoped<IPointRepository, PointRepository>();
 
 var app = builder.Build();
 
+var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
+
+lifetime.ApplicationStarted.Register(() =>
+{
+    app.Logger.LogInformation("Scalar UI is now running at {HostAdress}/scalar", app.Urls.First());
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseMiddleware<NotFoundMiddleware>();
